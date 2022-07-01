@@ -1,5 +1,7 @@
 ## User settings
 xcuserdata/
+Scoreboard.xcodeproj/xcuserdata/
+Pods/
 
 ## Xcode 8 and earlier
 *.xcscmblueprint
