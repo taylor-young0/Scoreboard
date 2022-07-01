@@ -5,6 +5,8 @@
 //  Created by Taylor Young on 2022-06-30.
 //
 
+// swiftlint:disable type_name
+
 import XCTest
 @testable import Scoreboard_WatchKit_Extension
 

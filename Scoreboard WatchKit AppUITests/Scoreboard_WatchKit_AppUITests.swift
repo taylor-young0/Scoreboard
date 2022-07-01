@@ -5,6 +5,8 @@
 //  Created by Taylor Young on 2022-06-30.
 //
 
+// swiftlint:disable type_name
+
 import XCTest
 
 class Scoreboard_WatchKit_AppUITests: XCTestCase {
