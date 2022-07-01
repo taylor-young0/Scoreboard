@@ -9,3 +9,4 @@
 ### Additional setup
 1. #### Xcode Text Editing settings
 - Ensure `"Automatically trim trailing whitespace"` and `"Including whitespace-only lines"` are both enabled. (Xcode > Preferences > Text Editing > Editing)
+![Xcode Text Editing settings](README%20Images/Text%20Editing%20Settings.png)
