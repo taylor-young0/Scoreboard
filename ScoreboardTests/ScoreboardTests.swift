@@ -10,27 +10,61 @@ import XCTest
 
 class ScoreboardTests: XCTestCase {
 
+    private var sut: ScoreboardViewModel!
+    private var swipeUp: CGSize = CGSize(width: 0, height: -100)
+    private var swipeDown: CGSize = CGSize(width: 0, height: 100)
+
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        sut = ScoreboardViewModel()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        sut = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testScoresStartAtZero() {
+        XCTAssertEqual(sut.firstScore, 0)
+        XCTAssertEqual(sut.secondScore, 0)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testSwipeUpIncreasesFirstScore() {
+        XCTAssertEqual(sut.firstScore, 0)
+        XCTAssertEqual(sut.secondScore, 0)
+        sut.handleSwipe(with: swipeUp, for: .firstScore)
+        XCTAssertEqual(sut.firstScore, 1)
+        XCTAssertEqual(sut.secondScore, 0)
+    }
+
+    func testSwipeDownDecreasesFirstScore() {
+        sut.firstScore = 5
+        XCTAssertEqual(sut.secondScore, 0)
+        sut.handleSwipe(with: swipeDown, for: .firstScore)
+        XCTAssertEqual(sut.firstScore, 4)
+        XCTAssertEqual(sut.secondScore, 0)
+    }
+
+    func testSwipeUpIncreasesSecondScore() {
+        XCTAssertEqual(sut.firstScore, 0)
+        XCTAssertEqual(sut.secondScore, 0)
+        sut.handleSwipe(with: swipeUp, for: .secondScore)
+        XCTAssertEqual(sut.firstScore, 0)
+        XCTAssertEqual(sut.secondScore, 1)
+    }
+
+    func testSwipeDownDecreasesSecondScore() {
+        sut.secondScore = 5
+        XCTAssertEqual(sut.firstScore, 0)
+        sut.handleSwipe(with: swipeDown, for: .secondScore)
+        XCTAssertEqual(sut.firstScore, 0)
+        XCTAssertEqual(sut.secondScore, 4)
+    }
+
+    func testScoreCannotBeNegative() {
+        sut.handleSwipe(with: swipeDown, for: .firstScore)
+        XCTAssertEqual(sut.firstScore, 0)
+
+        sut.handleSwipe(with: swipeDown, for: .secondScore)
+        XCTAssertEqual(sut.secondScore, 0)
     }
 
 }
