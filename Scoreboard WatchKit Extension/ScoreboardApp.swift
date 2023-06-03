@@ -12,7 +12,8 @@ struct ScoreboardApp: App {
     @SceneBuilder var body: some Scene {
         WindowGroup {
             NavigationView {
-                ContentView()
+                ScoreboardView()
+                    .environmentObject(ScoreboardViewModel())
             }
         }
 
