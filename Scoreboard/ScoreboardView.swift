@@ -23,19 +23,34 @@ struct ScoreboardView: View {
 
         ZStack(alignment: .topTrailing) {
             HStack(spacing: 0) {
-                Color.cyan
+                viewModel.firstColor
                     .overlay {
                         firstScoreView
                     }
                     .gesture(firstScoreSwipeGesture)
-                Color.white
+                viewModel.secondColor
                     .overlay {
                         secondScoreView
                     }
                     .gesture(secondScoreSwipeGesture)
             }
+            .edgesIgnoringSafeArea(.all)
+
+            #if os(iOS)
+            Button {
+                viewModel.showingSettings.toggle()
+            } label: {
+                Image(systemName: "gear")
+                    .font(.title2)
+                    .foregroundColor(viewModel.firstColor)
+                    .padding(.trailing, 25)
+                    .padding(.top, 10)
+            }
+            #endif
         }
-        .edgesIgnoringSafeArea(.all)
+        .sheet(isPresented: $viewModel.showingSettings) {
+            SettingsView()
+        }
     }
 
     var firstScoreView: some View {

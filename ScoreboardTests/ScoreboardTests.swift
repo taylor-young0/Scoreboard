@@ -11,8 +11,8 @@ import XCTest
 class ScoreboardTests: XCTestCase {
 
     private var sut: ScoreboardViewModel!
-    private var swipeUp: CGSize = CGSize(width: 0, height: -100)
-    private var swipeDown: CGSize = CGSize(width: 0, height: 100)
+    private let swipeUp: CGSize = CGSize(width: 0, height: -100)
+    private let swipeDown: CGSize = CGSize(width: 0, height: 100)
 
     override func setUpWithError() throws {
         sut = ScoreboardViewModel()
@@ -64,6 +64,19 @@ class ScoreboardTests: XCTestCase {
         XCTAssertEqual(sut.firstScore, 0)
 
         sut.handleSwipe(with: swipeDown, for: .secondScore)
+        XCTAssertEqual(sut.secondScore, 0)
+    }
+
+    func testSettingsSheetStartsHidden() {
+        XCTAssertFalse(sut.showingSettings)
+    }
+
+    func testScoresResetToZero() {
+        sut.firstScore = 10
+        sut.secondScore = 9
+        sut.resetScores()
+
+        XCTAssertEqual(sut.firstScore, 0)
         XCTAssertEqual(sut.secondScore, 0)
     }
 

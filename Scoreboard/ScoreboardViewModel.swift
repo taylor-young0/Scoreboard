@@ -17,7 +17,8 @@ final class ScoreboardViewModel: ObservableObject {
     @Published var secondScore: Int = 0
     @Published var firstColor: Color = .cyan
     @Published var secondColor: Color = .white
-    
+    @Published var showingSettings: Bool = false
+
     var minimumSwipeDistance: CGFloat {
         #if os(iOS)
             return 100
@@ -32,6 +33,11 @@ final class ScoreboardViewModel: ObservableObject {
         } else {
             score == .firstScore ? decrementFirstScore() : decrementSecondScore()
         }
+    }
+
+    func resetScores() {
+        firstScore = 0
+        secondScore = 0
     }
 
     private func incrementFirstScore() {

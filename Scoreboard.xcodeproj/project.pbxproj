@@ -14,6 +14,8 @@
 		48DA31D1A94F85E38EF0216D /* Pods_Scoreboard_WatchKit_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2CC788B443A190F4F8FCFF1 /* Pods_Scoreboard_WatchKit_App.framework */; };
 		8A9E82D010FF6F3E5D15E093 /* Pods_Scoreboard_ScoreboardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 122F19A64B087716B312AC2A /* Pods_Scoreboard_ScoreboardUITests.framework */; };
 		C22579139F848988400D891B /* Pods_Scoreboard_WatchKit_AppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 378B9C1347A93E25E5ED5965 /* Pods_Scoreboard_WatchKit_AppTests.framework */; };
+		EF9386192A34D17000193D72 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9386182A34D17000193D72 /* SettingsView.swift */; };
+		EF93861A2A34D2DE00193D72 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9386182A34D17000193D72 /* SettingsView.swift */; };
 		EF9EA1E1286E8C5100287906 /* ScoreboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9EA1E0286E8C5100287906 /* ScoreboardApp.swift */; };
 		EF9EA1E5286E8C5300287906 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF9EA1E4286E8C5300287906 /* Assets.xcassets */; };
 		EF9EA1E8286E8C5300287906 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF9EA1E7286E8C5300287906 /* Preview Assets.xcassets */; };
@@ -129,6 +131,7 @@
 		C2CC788B443A190F4F8FCFF1 /* Pods_Scoreboard_WatchKit_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Scoreboard_WatchKit_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3BE7DCBDE9D4837795F1DC0 /* Pods-Scoreboard-Scoreboard WatchKit AppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scoreboard-Scoreboard WatchKit AppUITests.release.xcconfig"; path = "Target Support Files/Pods-Scoreboard-Scoreboard WatchKit AppUITests/Pods-Scoreboard-Scoreboard WatchKit AppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E5C3171F08DA5FBFDAEB8546 /* Pods-Scoreboard-ScoreboardUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scoreboard-ScoreboardUITests.release.xcconfig"; path = "Target Support Files/Pods-Scoreboard-ScoreboardUITests/Pods-Scoreboard-ScoreboardUITests.release.xcconfig"; sourceTree = "<group>"; };
+		EF9386182A34D17000193D72 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		EF9EA1DD286E8C5100287906 /* Scoreboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scoreboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF9EA1E0286E8C5100287906 /* ScoreboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardApp.swift; sourceTree = "<group>"; };
 		EF9EA1E4286E8C5300287906 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -290,6 +293,7 @@
 				EF9EA1E0286E8C5100287906 /* ScoreboardApp.swift */,
 				EFAE82492A2BA3D9003E7906 /* ScoreboardView.swift */,
 				EFAE824B2A2BA5DD003E7906 /* ScoreboardViewModel.swift */,
+				EF9386182A34D17000193D72 /* SettingsView.swift */,
 				EF9EA1E4286E8C5300287906 /* Assets.xcassets */,
 				EF9EA1E6286E8C5300287906 /* Preview Content */,
 			);
@@ -805,6 +809,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFAE824C2A2BA5DD003E7906 /* ScoreboardViewModel.swift in Sources */,
+				EF9386192A34D17000193D72 /* SettingsView.swift in Sources */,
 				EFAE824A2A2BA3D9003E7906 /* ScoreboardView.swift in Sources */,
 				EF9EA1E1286E8C5100287906 /* ScoreboardApp.swift in Sources */,
 			);
@@ -831,6 +836,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF93861A2A34D2DE00193D72 /* SettingsView.swift in Sources */,
 				EF9EA216286E8C5600287906 /* NotificationController.swift in Sources */,
 				EF9EA21A286E8C5600287906 /* ComplicationController.swift in Sources */,
 				EF9EA212286E8C5600287906 /* ScoreboardApp.swift in Sources */,
