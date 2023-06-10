@@ -17,6 +17,14 @@ final class ScoreboardViewModel: ObservableObject {
     @Published var secondScore: Int = 0
     @Published var firstColor: Color = .cyan
     @Published var secondColor: Color = .white
+    
+    var minimumSwipeDistance: CGFloat {
+        #if os(iOS)
+            return 100
+        #elseif os(watchOS)
+            return 50
+        #endif
+    }
 
     func handleSwipe(with translation: CGSize, for score: Score) {
         if translation.height < 0 {

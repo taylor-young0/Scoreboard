@@ -10,21 +10,13 @@ import SwiftUI
 struct ScoreboardView: View {
     @EnvironmentObject var viewModel: ScoreboardViewModel
 
-    var minimumSwipeDistance: CGFloat {
-        #if os(iOS)
-            return 100
-        #elseif os(watchOS)
-            return 50
-        #endif
-    }
-
     var body: some View {
-        let firstScoreSwipeGesture = DragGesture(minimumDistance: minimumSwipeDistance, coordinateSpace: .global)
+        let firstScoreSwipeGesture = DragGesture(minimumDistance: viewModel.minimumSwipeDistance, coordinateSpace: .global)
             .onEnded { value in
                 viewModel.handleSwipe(with: value.translation, for: .firstScore)
             }
 
-        let secondScoreSwipeGesture = DragGesture(minimumDistance: minimumSwipeDistance, coordinateSpace: .global)
+        let secondScoreSwipeGesture = DragGesture(minimumDistance: viewModel.minimumSwipeDistance, coordinateSpace: .global)
             .onEnded { value in
                 viewModel.handleSwipe(with: value.translation, for: .secondScore)
             }
