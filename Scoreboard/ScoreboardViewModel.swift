@@ -30,6 +30,7 @@ final class ScoreboardViewModel: ObservableObject {
     @Published var showingSettings: Bool = false
 
     var userDefaults: UserDefaults
+    var isEditingScore: Score?
 
     private var cancellables: [AnyCancellable] = []
 
@@ -58,6 +59,15 @@ final class ScoreboardViewModel: ObservableObject {
                 self?.saveColor(color, for: .secondScore)
             }
             .store(in: &cancellables)
+
+        $showingSettings
+            .dropFirst()
+            .sink { [weak self] value in
+                if value == false {
+                    self?.isEditingScore = nil
+                }
+            }
+            .store(in: &cancellables)
     }
 
     var minimumSwipeDistance: CGFloat {
@@ -83,6 +93,11 @@ final class ScoreboardViewModel: ObservableObject {
 
     func saveColor(_ color: Color, for score: Score) {
         userDefaults.set(color, forKey: score.colorKey)
+    }
+
+    func editScore(_ score: Score) {
+        isEditingScore = score
+        showingSettings = true
     }
 
     private func incrementFirstScore() {

@@ -26,11 +26,25 @@ struct ScoreboardView: View {
                 viewModel.firstColor
                     .overlay {
                         firstScoreView
+                            .contextMenu {
+                                Button {
+                                    viewModel.editScore(.firstScore)
+                                } label: {
+                                    editScoreView
+                                }
+                            }
                     }
                     .gesture(firstScoreSwipeGesture)
                 viewModel.secondColor
                     .overlay {
                         secondScoreView
+                            .contextMenu {
+                                Button {
+                                    viewModel.editScore(.secondScore)
+                                } label: {
+                                    editScoreView
+                                }
+                            }
                     }
                     .gesture(secondScoreSwipeGesture)
             }
@@ -80,6 +94,10 @@ struct ScoreboardView: View {
                 .foregroundColor(color)
                 .padding()
         }
+    }
+
+    var editScoreView: some View {
+        Label("Edit score", systemImage: "square.and.pencil")
     }
 }
 

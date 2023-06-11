@@ -77,6 +77,16 @@ struct SettingsView: View {
             } message: {
                 Text("Are you sure you want to reset scores? Both scores will be reset to 0.")
             }
+            .onAppear {
+                if let isEditingScore = viewModel.isEditingScore {
+                    switch isEditingScore {
+                    case .firstScore:
+                        focusedField = .firstScore
+                    case .secondScore:
+                        focusedField = .secondScore
+                    }
+                }
+            }
 
         }
         #endif
