@@ -42,6 +42,7 @@ final class ScoreboardViewModel: ObservableObject {
         self.userDefaults = userDefaults
 
         $firstColor
+            .dropFirst()
             .debounce(for: 0.5, scheduler: RunLoop.main)
             .removeDuplicates()
             .sink { [weak self] color in
@@ -50,6 +51,7 @@ final class ScoreboardViewModel: ObservableObject {
             .store(in: &cancellables)
 
         $secondColor
+            .dropFirst()
             .debounce(for: 0.5, scheduler: RunLoop.main)
             .removeDuplicates()
             .sink { [weak self] color in
