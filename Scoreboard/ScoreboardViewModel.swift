@@ -7,17 +7,56 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 enum Score {
     case firstScore, secondScore
+
+    var colorKey: String {
+        switch self {
+        case .firstScore:
+            return "firstColor"
+        case .secondScore:
+            return "secondColor"
+        }
+    }
 }
 
 final class ScoreboardViewModel: ObservableObject {
     @Published var firstScore: Int = 0
     @Published var secondScore: Int = 0
-    @Published var firstColor: Color = .cyan
-    @Published var secondColor: Color = .white
+    @Published var firstColor: Color
+    @Published var secondColor: Color
     @Published var showingSettings: Bool = false
+
+    var userDefaults: UserDefaults
+
+    private var cancellables: [AnyCancellable] = []
+
+    init(userDefaults: UserDefaults = .standard) {
+        let firstColor: Color? = userDefaults.color(forKey: Score.firstScore.colorKey)
+        let secondColor: Color? = userDefaults.color(forKey: Score.secondScore.colorKey)
+
+        self.firstColor = firstColor == nil ? .cyan : firstColor!
+        self.secondColor = secondColor == nil ? .white : secondColor!
+        self.userDefaults = userDefaults
+
+        $firstColor
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] color in
+                self?.saveColor(color, for: .firstScore)
+            }
+            .store(in: &cancellables)
+
+        $secondColor
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] color in
+                self?.saveColor(color, for: .secondScore)
+            }
+            .store(in: &cancellables)
+    }
 
     var minimumSwipeDistance: CGFloat {
         #if os(iOS)
@@ -38,6 +77,10 @@ final class ScoreboardViewModel: ObservableObject {
     func resetScores() {
         firstScore = 0
         secondScore = 0
+    }
+
+    func saveColor(_ color: Color, for score: Score) {
+        userDefaults.set(color, forKey: score.colorKey)
     }
 
     private func incrementFirstScore() {

@@ -6,16 +6,20 @@
 //
 
 import XCTest
+import SwiftUI
 @testable import Scoreboard
 
 class ScoreboardTests: XCTestCase {
 
     private var sut: ScoreboardViewModel!
+    private var userDefaults: UserDefaults!
     private let swipeUp: CGSize = CGSize(width: 0, height: -100)
     private let swipeDown: CGSize = CGSize(width: 0, height: 100)
 
     override func setUpWithError() throws {
-        sut = ScoreboardViewModel()
+        userDefaults = UserDefaults(suiteName: #file)
+        userDefaults.removePersistentDomain(forName: #file)
+        sut = ScoreboardViewModel(userDefaults: userDefaults)
     }
 
     override func tearDownWithError() throws {
@@ -80,4 +84,43 @@ class ScoreboardTests: XCTestCase {
         XCTAssertEqual(sut.secondScore, 0)
     }
 
+    func testDefaultFirstScoreColor() {
+        XCTAssertEqual(sut.firstColor, Color.cyan)
+    }
+
+    func testDefaultSecondScoreColor() {
+        XCTAssertEqual(sut.secondColor, Color.white)
+    }
+
+    func testColorSaves() {
+        sut.saveColor(Color.gray, for: .firstScore)
+        sut.saveColor(Color.black, for: .secondScore)
+
+        XCTAssertEqual(
+            try? NSKeyedArchiver.archivedData(withRootObject: UIColor(Color.gray), requiringSecureCoding: false),
+            userDefaults.data(forKey: Score.firstScore.colorKey)
+        )
+
+        XCTAssertEqual(
+            try? NSKeyedArchiver.archivedData(withRootObject: UIColor(Color.black), requiringSecureCoding: false),
+            userDefaults.data(forKey: Score.secondScore.colorKey)
+        )
+    }
+
+    func testSavedColorLoads() {
+        sut.saveColor(Color.orange, for: .firstScore)
+        sut.saveColor(Color.mint, for: .secondScore)
+
+        sut = ScoreboardViewModel(userDefaults: userDefaults)
+
+        XCTAssertEqual(
+            try? NSKeyedArchiver.archivedData(withRootObject: UIColor(sut.firstColor), requiringSecureCoding: false),
+            try? NSKeyedArchiver.archivedData(withRootObject: UIColor(Color.orange), requiringSecureCoding: false)
+        )
+
+        XCTAssertEqual(
+            try? NSKeyedArchiver.archivedData(withRootObject: UIColor(sut.secondColor), requiringSecureCoding: false),
+            try? NSKeyedArchiver.archivedData(withRootObject: UIColor(Color.mint), requiringSecureCoding: false)
+        )
+    }
 }
