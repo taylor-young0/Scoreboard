@@ -123,4 +123,19 @@ class ScoreboardTests: XCTestCase {
             try? NSKeyedArchiver.archivedData(withRootObject: UIColor(Color.mint), requiringSecureCoding: false)
         )
     }
+
+    func testEditingScoresThroughContextMenuFocusesAndClears() {
+        sut.editScore(.firstScore)
+        XCTAssertTrue(sut.showingSettings)
+        XCTAssertEqual(sut.isEditingScore, .firstScore)
+
+        sut.showingSettings = false
+
+        sut.editScore(.secondScore)
+        XCTAssertTrue(sut.showingSettings)
+        XCTAssertEqual(sut.isEditingScore, .secondScore)
+
+        sut.showingSettings = false
+        XCTAssertNil(sut.isEditingScore)
+    }
 }
