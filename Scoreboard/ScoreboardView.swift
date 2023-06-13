@@ -26,6 +26,7 @@ struct ScoreboardView: View {
                 viewModel.firstColor
                     .overlay {
                         firstScoreView
+                            .animation(.easeOut, value: viewModel.firstScoreSize)
                             .contextMenu {
                                 Button {
                                     viewModel.editScore(.firstScore)
@@ -38,6 +39,7 @@ struct ScoreboardView: View {
                 viewModel.secondColor
                     .overlay {
                         secondScoreView
+                            .animation(.easeOut, value: viewModel.secondScoreSize)
                             .contextMenu {
                                 Button {
                                     viewModel.editScore(.secondScore)
@@ -68,24 +70,17 @@ struct ScoreboardView: View {
     }
 
     var firstScoreView: some View {
-        ScoreTextView(score: viewModel.firstScore, color: viewModel.secondColor)
+        ScoreTextView(score: viewModel.firstScore, color: viewModel.secondColor, fontSize: viewModel.fontSize(for: .firstScore))
     }
 
     var secondScoreView: some View {
-        ScoreTextView(score: viewModel.secondScore, color: viewModel.firstColor)
+        ScoreTextView(score: viewModel.secondScore, color: viewModel.firstColor, fontSize: viewModel.fontSize(for: .secondScore))
     }
 
     struct ScoreTextView: View {
         var score: Int
         var color: Color
-
-        var fontSize: CGFloat {
-            #if os(iOS)
-                return 100
-            #elseif os(watchOS)
-                return 50
-            #endif
-        }
+        var fontSize: CGFloat
 
         var body: some View {
             Text("\(score)")

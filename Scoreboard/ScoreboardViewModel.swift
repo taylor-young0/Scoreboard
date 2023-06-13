@@ -22,12 +22,18 @@ enum Score {
     }
 }
 
+enum ScoreSize {
+    case shrunken, normal, expanded
+}
+
 final class ScoreboardViewModel: ObservableObject {
     @Published var firstScore: Int = 0
     @Published var secondScore: Int = 0
     @Published var firstColor: Color
     @Published var secondColor: Color
     @Published var showingSettings: Bool = false
+    @Published var firstScoreSize: ScoreSize = .normal
+    @Published var secondScoreSize: ScoreSize = .normal
 
     var userDefaults: UserDefaults
     var isEditingScore: Score?
@@ -68,11 +74,71 @@ final class ScoreboardViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+
+        $firstScore
+            .dropFirst()
+            .delay(for: 0.05, scheduler: RunLoop.main)
+            .scan((older: 0, newer: 0)) { previousValues, nextValue in
+                return (previousValues.newer, nextValue)
+            }
+            .sink { [weak self] recentScores in
+                let scoreDifference: Int = recentScores.newer - recentScores.older
+                self?.firstScoreSize = scoreDifference >= 0 ? .expanded : .shrunken
+            }
+            .store(in: &cancellables)
+
+        $secondScore
+            .dropFirst()
+            .delay(for: 0.05, scheduler: RunLoop.main)
+            .scan((older: 0, newer: 0)) { previousValues, nextValue in
+                return (previousValues.newer, nextValue)
+            }
+            .sink { [weak self] recentScores in
+                let scoreDifference: Int = recentScores.newer - recentScores.older
+                self?.secondScoreSize = scoreDifference >= 0 ? .expanded : .shrunken
+            }
+            .store(in: &cancellables)
+
+        $firstScoreSize
+            .filter({
+                $0 == .shrunken || $0 == .expanded
+            })
+            .delay(for: 0.2, scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.firstScoreSize = .normal
+            }
+            .store(in: &cancellables)
+
+        $secondScoreSize
+            .filter({
+                $0 == .shrunken || $0 == .expanded
+            })
+            .delay(for: 0.2, scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.secondScoreSize = .normal
+            }
+            .store(in: &cancellables)
     }
 
     var minimumSwipeDistance: CGFloat {
         #if os(iOS)
             return 100
+        #elseif os(watchOS)
+            return 50
+        #endif
+    }
+
+    func fontSize(for score: Score) -> CGFloat {
+        #if os(iOS)
+        let scoreSize: ScoreSize = score == .firstScore ? firstScoreSize : secondScoreSize
+        switch scoreSize {
+        case .shrunken:
+            return 80
+        case .normal:
+            return 100
+        case .expanded:
+            return 120
+        }
         #elseif os(watchOS)
             return 50
         #endif
