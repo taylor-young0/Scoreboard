@@ -7,6 +7,7 @@
 
 import XCTest
 import SwiftUI
+import Combine
 @testable import Scoreboard
 
 class ScoreboardTests: XCTestCase {
@@ -15,11 +16,13 @@ class ScoreboardTests: XCTestCase {
     private var userDefaults: UserDefaults!
     private let swipeUp: CGSize = CGSize(width: 0, height: -100)
     private let swipeDown: CGSize = CGSize(width: 0, height: 100)
+    private var cancellables: [AnyCancellable] = []
 
     override func setUpWithError() throws {
         userDefaults = UserDefaults(suiteName: #file)
         userDefaults.removePersistentDomain(forName: #file)
         sut = ScoreboardViewModel(userDefaults: userDefaults)
+        cancellables = []
     }
 
     override func tearDownWithError() throws {
@@ -137,5 +140,61 @@ class ScoreboardTests: XCTestCase {
 
         sut.showingSettings = false
         XCTAssertNil(sut.isEditingScore)
+    }
+
+    func testScoreSizeStartsNormal() {
+        XCTAssertEqual(sut.firstScoreSize, .normal)
+        XCTAssertEqual(sut.secondScoreSize, .normal)
+    }
+
+    func testIncreasingScoreIncreasesFontSize() {
+        // First score should use expanded font size when score is increased
+        sut.handleSwipe(with: swipeUp, for: .firstScore)
+        waitForScoreFontSizeWith(expectedSize: .expanded, on: .firstScore)
+
+        // First score should revert back to normal font size
+        waitForScoreFontSizeWith(expectedSize: .normal, on: .firstScore)
+
+        // Second score should use expanded font size when score is increased
+        sut.handleSwipe(with: swipeUp, for: .secondScore)
+        waitForScoreFontSizeWith(expectedSize: .expanded, on: .secondScore)
+
+        // Second score should revert back to normal font size
+        waitForScoreFontSizeWith(expectedSize: .normal, on: .secondScore)
+    }
+
+    func testDecreasingScoreDecreasesFontSize() {
+        // First score should use shrunken font size when score is decreased
+        sut.handleSwipe(with: swipeUp, for: .firstScore)
+        sut.handleSwipe(with: swipeDown, for: .firstScore)
+        waitForScoreFontSizeWith(expectedSize: .shrunken, on: .firstScore, droppingFirst: 2)
+
+        // First score should revert back to normal font size
+        waitForScoreFontSizeWith(expectedSize: .normal, on: .firstScore)
+
+        // Second score should use shrunken font size when score is decreased
+        sut.handleSwipe(with: swipeUp, for: .secondScore)
+        sut.handleSwipe(with: swipeDown, for: .secondScore)
+        waitForScoreFontSizeWith(expectedSize: .shrunken, on: .secondScore, droppingFirst: 2)
+
+        // Second score should revert back to normal font size
+        waitForScoreFontSizeWith(expectedSize: .normal, on: .secondScore)
+    }
+
+    func waitForScoreFontSizeWith(expectedSize: ScoreSize, on score: Score, droppingFirst count: Int = 1) {
+        let scoreSizeExpectation: XCTestExpectation = XCTestExpectation()
+        let scoreSizePublisher = score == .firstScore ? sut.$firstScoreSize : sut.$secondScoreSize
+
+        scoreSizePublisher
+            .dropFirst(count)
+            .sink { size in
+                XCTAssertEqual(size, expectedSize)
+                scoreSizeExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+
+        wait(for: [scoreSizeExpectation], timeout: 0.5)
+
+        cancellables = []
     }
 }
